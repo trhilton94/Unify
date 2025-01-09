@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UnifyApplication {
+public class UnifyApplication{
 
-	public static void main(String[] args) {
-		SpringApplication.run(UnifyApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UnifyApplication.class, args);
+    }
 
 }

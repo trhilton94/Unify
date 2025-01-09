@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function SteamWidget() {
+export default function F1Widget() {
     return (
         <div>
-            <h1>Steam Widget</h1>
+            <h1>F1 Widget</h1>
         </div>
     );
 }

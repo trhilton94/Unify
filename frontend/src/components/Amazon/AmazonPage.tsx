@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Navbar from "components/General/NavBar";
+import Navbar from 'components/General/NavBar';
 
 export default function AmazonPage() {
     return (

@@ -1,25 +1,25 @@
 {
-  "compilerOptions": {
-    "target": "ES6",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["*"]
+    "compilerOptions": {
+        "target": "ESNext", // Upgraded to ESNext for future-proofing
+        "lib": ["DOM", "DOM.Iterable", "ESNext"], // Keep current libs for DOM & modern JS features
+        "allowJs": true, // Allows JavaScript files in the project
+        "skipLibCheck": true, // Skips type checking of declaration files for performance
+        "esModuleInterop": true, // Ensures ES module interop with CommonJS modules
+        "allowSyntheticDefaultImports": true, // Allow default imports even if not specified in module
+        "strict": true, // Enables all strict type-checking options
+        "forceConsistentCasingInFileNames": true, // Ensure consistent casing in imports
+        "module": "ESNext", // Uses the latest module system
+        "moduleResolution": "Node", // Resolves modules in Node.js style
+        "resolveJsonModule": true, // Allows importing JSON modules
+        "isolatedModules": true, // Ensures each file can be transpiled independently
+        "noEmit": true, // Disables emitting files, useful for purely type-checking builds
+        "jsx": "react-jsx", // Enables the new JSX runtime for React
+        "baseUrl": "./src", // Sets the base URL for module resolution
+        "paths": {
+            "*": ["*"] // Maps all paths relative to the `baseUrl`
+        },
+        "types": ["jest", "node"] // Includes Jest and Node types
     },
-    "types": ["jest"]
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "build"]
+    "include": ["src/**/*"], // Include all files in the `src` directory
+    "exclude": ["node_modules", "build", "**/*.test.ts", "**/*.test.tsx"] // Excludes unnecessary directories & test files
 }

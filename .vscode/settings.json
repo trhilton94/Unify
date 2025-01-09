@@ -1,4 +1,48 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "java.compile.nullAnalysis.mode": "automatic"
+  "editor.tabCompletion": "on",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Set Prettier as the default formatter
+  "editor.formatOnPaste": true,
+  "files.trimFinalNewlines": true, // Match your "eol-last" ESLint rule
+  "files.insertFinalNewline": false, // Ensure no extra newlines
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"], // Languages to validate with ESLint
+  "prettier.useTabs": false, // Use spaces instead of tabs (sync with Prettier)
+  "prettier.tabWidth": 4, // Set tab width to 4
+  "prettier.trailingComma": "es5", // Match Prettier rule for trailing commas
+  "prettier.semi": true, // Use semicolons
+  "prettier.singleQuote": true, // Use single quotes
+  "prettier.endOfLine": "lf", // Use LF for line endings
+  "prettier.insertFinalNewline": false, // Ensure no extra newlines
+  "prettier.requireConfig": true, // Enforce a Prettier config file
+  "eslint.options": {
+    "configFile": "eslint.config.mjs" // Ensure ESLint uses your configuration file
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Shades of Purple (Super Dark)",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "java.format.settings.url": "./eclipse-java-formatter.xml",
+    "java.format.settings.profile": "JavaCustomFormat",
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+  "java.configuration.updateBuildConfiguration": "automatic",
+	"java.compile.nullAnalysis.mode": "automatic",
+  "files.autoSave": "afterDelay",
+
+  "codeium.enableCodeLens": false,
+  "editor.minimap.enabled": false,
+  "codeium.enableConfig": {
+    "*": true,
+    "markdown": true,
+    "xml": true,
+    "editorconfig": true
+  },
+  "RainbowBrackets.depreciation-notice": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "workbench.settings.applyToAllProfiles": [
+    "prettier.requireConfig"
+  ],
 }

@@ -1,11 +1,10 @@
 package com.example.unify.controllers;
 
-import com.example.unify.models.WeatherResponse;
 import com.example.unify.models.ForecastResponse;
+import com.example.unify.models.WeatherAlertResponse;
+import com.example.unify.models.WeatherResponse;
 import com.example.unify.services.WeatherService;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +13,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class WeatherController {
+public class WeatherController{
 
     @Autowired
     private WeatherService weatherService;
 
     @GetMapping("/weather/city")
-    public ResponseEntity<?> getWeatherbyCity(@RequestParam String city, @RequestParam String state, @RequestParam String country) {
+    public ResponseEntity<?> getWeatherbyCity(@RequestParam String city, @RequestParam String state,
+            @RequestParam String country) {
         try {
             WeatherResponse weather = weatherService.getWeatherByCity(city, state, country);
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error fetching weather data: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
         }
     }
 
@@ -36,13 +35,13 @@ public class WeatherController {
             WeatherResponse weather = weatherService.getWeatherByCoordinates();
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error fetching weather data: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
         }
     }
 
     @GetMapping("/forecast/city")
-    public ResponseEntity<?> getForecastByCity(@RequestParam String city, @RequestParam String state, @RequestParam String country) {
+    public ResponseEntity<?> getForecastByCity(@RequestParam String city, @RequestParam String state,
+            @RequestParam String country) {
         try {
             List<ForecastResponse> forecast = weatherService.getForecastByCity(city, state, country);
             return ResponseEntity.ok(forecast);
@@ -60,6 +59,29 @@ public class WeatherController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error fetching forecast data: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/weather-alerts/city")
+    public ResponseEntity<?> getWeatherAlertsByCity(@RequestParam String city, @RequestParam String state,
+            @RequestParam String country) {
+        try {
+            List<WeatherAlertResponse> weatherAlerts = weatherService.getWeatherAlertsByCity(city, state, country);
+            return ResponseEntity.ok(weatherAlerts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error fetching weather alert data: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/weather-alerts/home")
+    public ResponseEntity<?> getWeatherAlertsForHome() {
+        try {
+            List<WeatherAlertResponse> weatherAlerts = weatherService.getWeatherAlertsByCoordinates();
+            return ResponseEntity.ok(weatherAlerts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error fetching weather alert data: " + e.getMessage());
         }
     }
 }

@@ -2,11 +2,11 @@ import React from 'react';
 
 import Navbar from 'components/General/NavBar';
 
-export default function SmartHomePage() {
+export default function F1Page() {
     return (
         <div>
             <Navbar />
-            <h1>Smart Home Page</h1>
+            <h1>F1 Page</h1>
         </div>
     );
 }
