@@ -46,7 +46,7 @@ export default function App() {
             <Route path="/twitch" element={<TwitchPage />} />
             <Route path="/weather" element={<WeatherPage />} />
             <Route path="/youtube" element={<YoutubePage />} />
-            
+
             <Route path="*" element={<ErrorPage />} />
         </Routes>
     );
