@@ -1,14 +1,20 @@
-# Use an OpenJDK base image
-FROM openjdk:17-jdk-slim
+# Use a Maven base image with JDK for development
+FROM maven:3.8.5-openjdk-17
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the JAR file into the container
-COPY target/unify-0.0.1-SNAPSHOT.jar backend.jar
+# Copy only pom.xml to cache dependencies
+COPY pom.xml ./
 
-# Expose the port your application runs on
+# Pre-download Maven dependencies
+RUN mvn dependency:go-offline -B
+
+# Copy the entire backend code for development
+COPY . .
+
+# Expose the application port
 EXPOSE 8080
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "backend.jar"]
+# Default command for development
+CMD ["mvn", "spring-boot:run"]
