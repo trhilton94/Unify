@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class WeatherService{
+public class WeatherService {
 
     private final String apiKey = "cc36aeba153de37a9020de7cc0098384";
     private final String apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
@@ -115,8 +116,8 @@ public class WeatherService{
         JsonObject sys = json.getAsJsonObject("sys");
         long sunrise = sys.get("sunrise").getAsLong();
         long sunset = sys.get("sunset").getAsLong();
-        weatherResponse.setSunrise(convertUnixToReadableTime(sunrise));
-        weatherResponse.setSunset(convertUnixToReadableTime(sunset));
+        weatherResponse.setSunrise(convertUnixToReadableTime(sunrise, -18000));
+        weatherResponse.setSunset(convertUnixToReadableTime(sunset, -18000));
 
         return weatherResponse;
     }
@@ -176,8 +177,8 @@ public class WeatherService{
 
             weatherAlertResponse.setSenderName(alertObject.get("sender_name").getAsString());
             weatherAlertResponse.setEvent(alertObject.get("event").getAsString());
-            weatherAlertResponse.setStartTime(convertUnixToReadableTime(alertObject.get("start").getAsInt()));
-            weatherAlertResponse.setEndTime(convertUnixToReadableTime(alertObject.get("end").getAsInt()));
+            weatherAlertResponse.setStartTime(convertUnixToReadableTime(alertObject.get("start").getAsInt(), -18000));
+            weatherAlertResponse.setEndTime(convertUnixToReadableTime(alertObject.get("end").getAsInt(), -18000));
             weatherAlertResponse.setDescription(alertObject.get("description").getAsString());
 
             weatherAlertResponses.add(weatherAlertResponse);
@@ -186,8 +187,8 @@ public class WeatherService{
         return weatherAlertResponses;
     }
 
-    private String convertUnixToReadableTime(long timestamp) {
-        return Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault())
+    private String convertUnixToReadableTime(long timestamp, int timezoneOffset) {
+        return Instant.ofEpochSecond(timestamp + timezoneOffset).atZone(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 

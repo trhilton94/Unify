@@ -1,5 +1,8 @@
 {
-    "watch": ["src"],
-    "ext": "css,js,jsx,ts,tsx,json",
-    "exec": "npm start"
+    "watch": ["src/**/*"],
+    "ext": "js,jsx,ts,tsx,css,json",
+    "delay": "500ms",
+    "verbose": false,
+    "exec": "npm start",
+    "ignore": ["node_modules", "build"]
 }

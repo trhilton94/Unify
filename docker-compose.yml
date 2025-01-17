@@ -12,7 +12,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_API_URL=http://localhost:8080
-    command: bash -c "npm install && npx nodemon --watch src --exec 'npm start'"
+    command: bash -c "npm install && npx nodemon --watch src --config nodemon.json --exec 'npm start'"
     depends_on:
       - backend
 

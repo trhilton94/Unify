@@ -30,7 +30,7 @@
     },
   "java.configuration.updateBuildConfiguration": "automatic",
 	"java.compile.nullAnalysis.mode": "automatic",
-  "files.autoSave": "afterDelay",
+  "files.autoSave": "onFocusChange",
 
   "codeium.enableCodeLens": false,
   "editor.minimap.enabled": false,

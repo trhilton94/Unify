@@ -14,15 +14,15 @@ export default function Navbar() {
                     href="/"
                     className="font-bold flex items-center space-x-1 pl-4"
                 >
-                    <span className="flex items-center mb-1.5">
-                        <span className="text-3xl">&lt;</span>
-                        <span className="text-xl font-xl">∑</span>
-                        <span className="text-3xl">&gt;</span>
-                    </span>
+                    <img
+                        src="/navbarlogo.svg"
+                        alt="Unify Logo"
+                        className="h-8 w-auto relative -translate-y-0.25"
+                    />
                     <span className="text-white text-[26px]">UNiFY</span>
                 </a>
 
-                <div className="hidden md:flex space-x-6 ml-auto pr-4 text-[17px] font-semibold">
+                <div className="hidden 2xl:flex space-x-6 ml-auto pr-4 text-[17px] font-semibold">
                     <a href="/amazon" className="hover:text-blue-300">
                         Amazon
                     </a>
@@ -77,7 +77,7 @@ export default function Navbar() {
                 </div>
 
                 <button
-                    className="md:hidden text-white focus:outline-none"
+                    className="2xl:hidden text-white focus:outline-none"
                     onClick={toggleMenu}
                 >
                     <svg
@@ -102,59 +102,77 @@ export default function Navbar() {
             </div>
 
             {isOpen && (
-                <div className="md:hidden bg-[#242426] space-y-2 p-4">
-                    <a href="/home" className="block hover:text-blue-300">
+                <div className="2xl:hidden bg-[#242426] p-2 flex flex-col items-center">
+                    <a href="/home" className="block hover:text-blue-300 p-1">
                         Home
                     </a>
-                    <a href="/amazon" className="block hover:text-blue-300">
+                    <a href="/amazon" className="block hover:text-blue-300 p-1">
                         Amazon
                     </a>
-                    <a href="/calendar" className="block hover:text-blue-300">
+                    <a
+                        href="/calendar"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         Calendar
                     </a>
                     <a
                         href="/college-football"
-                        className="block hover:text-blue-300"
+                        className="block hover:text-blue-300 p-1"
                     >
                         College Football
                     </a>
-                    <a href="/epic-games" className="block hover:text-blue-300">
+                    <a
+                        href="/epic-games"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         Epic Games
                     </a>
-                    <a href="/gmail" className="block hover:text-blue-300">
+                    <a href="/gmail" className="block hover:text-blue-300 p-1">
                         Gmail
                     </a>
-                    <a href="/hulu" className="block hover:text-blue-300">
+                    <a href="/hulu" className="block hover:text-blue-300 p-1">
                         Hulu
                     </a>
-                    <a href="/netflix" className="block hover:text-blue-300">
+                    <a
+                        href="/netflix"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         Netflix
                     </a>
-                    <a href="/news" className="block hover:text-blue-300">
+                    <a href="/news" className="block hover:text-blue-300 p-1">
                         News
                     </a>
-                    <a href="/nfl" className="block hover:text-blue-300">
+                    <a href="/nfl" className="block hover:text-blue-300 p-1">
                         NFL
                     </a>
                     <a
                         href="/rocket-league"
-                        className="block hover:text-blue-300"
+                        className="block hover:text-blue-300 p-1"
                     >
                         Rocket League
                     </a>
-                    <a href="/smart-home" className="block hover:text-blue-300">
+                    <a
+                        href="/smart-home"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         Smart Home
                     </a>
-                    <a href="/steam" className="block hover:text-blue-300">
+                    <a href="/steam" className="block hover:text-blue-300 p-1">
                         Steam
                     </a>
-                    <a href="/twitch" className="block hover:text-blue-300">
+                    <a href="/twitch" className="block hover:text-blue-300 p-1">
                         Twitch
                     </a>
-                    <a href="/weather" className="block hover:text-blue-300">
+                    <a
+                        href="/weather"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         Weather
                     </a>
-                    <a href="/youtube" className="block hover:text-blue-300">
+                    <a
+                        href="/youtube"
+                        className="block hover:text-blue-300 p-1"
+                    >
                         YouTube
                     </a>
                 </div>
