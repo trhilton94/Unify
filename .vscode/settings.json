@@ -45,4 +45,5 @@
   "workbench.settings.applyToAllProfiles": [
     "prettier.requireConfig"
   ],
+  "makefile.configureOnOpen": false,
 }

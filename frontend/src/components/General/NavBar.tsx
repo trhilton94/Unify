@@ -1,14 +1,50 @@
 import React, { useState } from 'react';
 
-export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+import menu from '@material-design-icons/svg/round/menu.svg';
+import settings from '@material-design-icons/svg/round/settings.svg';
+import light from '@material-design-icons/svg/round/light_mode.svg';
+import dark from '@material-design-icons/svg/round/dark_mode.svg';
 
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
+import { useGeneral } from 'contexts/GeneralProvider';
+
+export default function Navbar() {
+    const { general, setGeneral } = useGeneral();
+
+    const toggleCategoriesDropdown = () => {
+        setGeneral((prevState) => ({
+            ...prevState,
+            categoryDropdownState: !prevState.categoryDropdownState,
+            settingsIconVisibilityState: !prevState.settingsIconVisibilityState,
+            settingsDropdownState: false,
+        }));
+    };
+
+    const toggleSettingsDropdown = () => {
+        setGeneral((prevState) => ({
+            ...prevState,
+            settingsDropdownState: !prevState.settingsDropdownState,
+        }));
+    };
+
+    const toggleDarkMode = () => {
+        const newState = !general.darkModeState;
+
+        if (newState) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        setGeneral((prevState) => ({
+            ...prevState,
+            darkModeState: newState,
+        }));
     };
 
     return (
-        <nav className="bg-[#242426] text-white">
+        <nav
+            className={`relative transition-colors shadow-lg duration-300 ${general.darkModeState ? 'bg-[#212121] text-white border-b border-t border-[white]' : 'bg-[#F5F5F5] text-black border-b border-t border-[black]'}`}
+        >
             <div className="w-full flex items-center justify-between p-2">
                 <a
                     href="/"
@@ -17,12 +53,16 @@ export default function Navbar() {
                     <img
                         src="/navbarlogo.svg"
                         alt="Unify Logo"
-                        className="h-8 w-auto relative -translate-y-0.25"
+                        className={`h-8 w-auto relative -translate-y-0.25 transition-colors duration-300 ${general.darkModeState ? '' : 'invert'}`}
                     />
-                    <span className="text-white text-[26px]">UNiFY</span>
+                    <span
+                        className={`text-[26px] transition-colors duration-300 ${general.darkModeState ? 'text-white' : 'text-black'}`}
+                    >
+                        UNiFY
+                    </span>
                 </a>
 
-                <div className="hidden 2xl:flex space-x-6 ml-auto pr-4 text-[17px] font-semibold">
+                <div className="hidden 2xl:flex justify-center w-full space-x-6 pr-4 text-[17px] font-semibold">
                     <a href="/amazon" className="hover:text-blue-300">
                         Amazon
                     </a>
@@ -77,33 +117,84 @@ export default function Navbar() {
                 </div>
 
                 <button
-                    className="2xl:hidden text-white focus:outline-none"
-                    onClick={toggleMenu}
+                    className="2xl:hidden focus:outline-none absolute left-1/2 transform -translate-x-3.5"
+                    onClick={toggleCategoriesDropdown}
                 >
-                    <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d={
-                                isOpen
-                                    ? 'M6 18L18 6M6 6l12 12'
-                                    : 'M4 6h16M4 12h16M4 18h16'
-                            }
-                        />
-                    </svg>
+                    <img
+                        src={menu}
+                        alt="Hamburger Icon"
+                        className={`h-8 transition-colors duration-300 ${general.darkModeState ? 'invert' : ''}`}
+                    />
                 </button>
+
+                {general.settingsIconVisibilityState && (
+                    <button
+                        className="focus:outline-none ml-4"
+                        onClick={toggleSettingsDropdown}
+                    >
+                        <img
+                            src={settings}
+                            alt="Settings Icon"
+                            className={`h-7 transition-colors duration-300 ${general.darkModeState ? 'invert' : ''}`}
+                        />
+                    </button>
+                )}
             </div>
 
-            {isOpen && (
-                <div className="2xl:hidden bg-[#242426] p-2 flex flex-col items-center">
-                    <a href="/home" className="block hover:text-blue-300 p-1">
+            {general.settingsDropdownState && (
+                <div
+                    className={`absolute right-0 p-2 flex flex-col items-center shadow-lg w-64 z-50 transition-colors duration-300 ${
+                        general.darkModeState
+                            ? 'bg-[#212121] text-white border-b border-l border-[white]'
+                            : 'bg-[#F5F5F5] text-black border-b border-l border-[black]'
+                    }`}
+                >
+                    <div className="p-1">
+                        <h2 className="text-lg font-bold mb-2">Settings</h2>
+                    </div>
+                    <div className="flex items-center justify-between w-full px-4 py-2">
+                        <span className="text-sm font-medium">
+                            {general.darkModeState ? 'Dark Mode' : 'Light Mode'}
+                        </span>
+                        <button
+                            onClick={toggleDarkMode}
+                            className={`flex items-center rounded-full p-1 w-14 h-8 relative transition-colors duration-300 ${
+                                general.darkModeState
+                                    ? 'bg-[white]'
+                                    : 'bg-[black]'
+                            }`}
+                        >
+                            <div
+                                className={`absolute top-0.5 transition-transform duration-300 ${
+                                    general.darkModeState
+                                        ? 'translate-x-6 translate-y-0.5'
+                                        : 'translate-x-0 translate-y-0.5'
+                                }`}
+                            >
+                                <img
+                                    src={general.darkModeState ? dark : light}
+                                    alt={
+                                        general.darkModeState
+                                            ? 'Dark Mode'
+                                            : 'Light Mode'
+                                    }
+                                    className={`h-6 w-6 transition-colors duration-300 ${general.darkModeState ? '' : 'invert'}`}
+                                />
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {general.categoryDropdownState && (
+                <div
+                    className={`2xl:hidden p-2 flex flex-col items-center shadow-lg font-semibold transition-colors duration-300 ${
+                        general.darkModeState
+                            ? 'bg-[#212121] text-white'
+                            : 'bg-[#F5F5F5] text-black'
+                    }`}
+                >
+                    <a href="/" className="block hover:text-blue-300 p-1">
                         Home
                     </a>
                     <a href="/amazon" className="block hover:text-blue-300 p-1">

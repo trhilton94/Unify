@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import States from '../General/States';
-import Countries from '../General/Countries';
+import States from '../../utils/States';
+import Countries from '../../utils/Countries';
+
+import { useGeneral } from 'contexts/GeneralProvider';
 
 import axios from 'axios';
 
@@ -27,6 +29,8 @@ export default function WeatherComponent() {
     const [country, setCountry] = useState('US');
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
     const [error, setError] = useState<string>('');
+
+    const { general } = useGeneral();
 
     useEffect(() => {
         const fetchDefaultWeatherData = async () => {
@@ -71,21 +75,35 @@ export default function WeatherComponent() {
     };
 
     return (
-        <div className="relative font-sans bg-white p-4">
+        <div className="relative font-sans p-4">
             {/* Weather Widget */}
-            <div className="absolute top-4 left-4 border rounded-lg p-4 bg-white shadow-md w-64">
+            <div
+                className={`absolute top-4 left-4 border p-4 shadow-md w-64 transition-colors duration-300 ${
+                    general.darkModeState
+                        ? 'bg-[#3B3B3B] text-white border-white'
+                        : 'bg-[#FFFFFF] text-black border-black'
+                }`}
+            >
                 <div className="flex flex-col gap-2 mb-4">
                     <input
                         type="text"
                         placeholder="Enter city"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="w-full p-2 text-sm border rounded-md"
+                        className={`w-full p-2 text-sm text-semibold border rounded-md transition-colors duration-300 ${
+                            general.darkModeState
+                                ? 'bg-[#4C4C4C] text-white'
+                                : 'bg-[#FFFFFF] text-black'
+                        }`}
                     />
                     <select
                         value={state}
                         onChange={(e) => setState(e.target.value)}
-                        className="w-full p-2 text-sm border rounded-md"
+                        className={`w-full p-2 text-sm text-semibold border rounded-md transition-colors duration-300 ${
+                            general.darkModeState
+                                ? 'bg-[#4C4C4C] text-white'
+                                : 'bg-[#FFFFFF] text-black'
+                        }`}
                     >
                         <option value="">Select state</option>
                         {States.map((state) => (
@@ -97,7 +115,11 @@ export default function WeatherComponent() {
                     <select
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        className="w-full p-2 text-sm border rounded-md"
+                        className={`w-full p-2 text-sm text-semibold border rounded-md transition-colors duration-300 ${
+                            general.darkModeState
+                                ? 'bg-[#4C4C4C] text-white'
+                                : 'bg-[#FFFFFF] text-black'
+                        }`}
                     >
                         <option value="">Select country</option>
                         {Countries.map((country) => (
@@ -114,7 +136,11 @@ export default function WeatherComponent() {
                     </button>
                 </div>
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {error && (
+                    <p className="text-red-500 text-sm text-semibold">
+                        {error}
+                    </p>
+                )}
 
                 {weatherData && (
                     <>

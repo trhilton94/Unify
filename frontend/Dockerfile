@@ -1,5 +1,8 @@
 FROM node:18
 
+# Install fuser (part of procps package)
+RUN apt-get update && apt-get install -y procps
+
 # Set working directory inside the container
 WORKDIR /app
 

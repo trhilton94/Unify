@@ -19,9 +19,17 @@ import TwitchWidget from 'components/Twitch/TwitchWidget';
 import WeatherWidget from '../Weather/WeatherWidget';
 import YoutubeWidget from 'components/Youtube/YoutubeWidget';
 
+import { useGeneral } from 'contexts/GeneralProvider';
+
 export default function Home() {
+    const { general } = useGeneral();
+
     return (
-        <div>
+        <div
+            className={`min-h-screen transition-colors duration-300 ${
+                general.darkModeState ? 'bg-[#2A2A2A]' : 'bg-[#E8E8E8]'
+            }`}
+        >
             <Navbar />
             <WeatherWidget />
         </div>

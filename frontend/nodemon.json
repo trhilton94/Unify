@@ -3,6 +3,6 @@
     "ext": "js,jsx,ts,tsx,css,json",
     "delay": "500ms",
     "verbose": false,
-    "exec": "npm start",
+    "exec": "fuser -k 3000/tcp || true && npm start",
     "ignore": ["node_modules", "build"]
 }

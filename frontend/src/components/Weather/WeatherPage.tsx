@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import States from '../General/States';
-import Countries from '../General/Countries';
+import States from '../../utils/States';
+import Countries from '../../utils/Countries';
 
 import axios from 'axios';
 import NavBar from 'components/General/NavBar';
@@ -44,9 +44,7 @@ export default function WeatherComponent() {
     useEffect(() => {
         const fetchDefaultWeatherData = async () => {
             try {
-                const response = await axios.get(
-                    `http://localhost:8080/weather/home`
-                );
+                const response = await axios.get(`http://localhost:8080/weather/home`);
                 setWeatherData(response.data);
                 setError('');
             } catch (err) {
@@ -56,9 +54,7 @@ export default function WeatherComponent() {
 
         const fetchDefaultForecastData = async () => {
             try {
-                const response = await axios.get(
-                    `http://localhost:8080/forecast/home`
-                );
+                const response = await axios.get(`http://localhost:8080/forecast/home`);
                 setForecastData(response.data);
                 setError('');
             } catch (err) {
@@ -72,12 +68,9 @@ export default function WeatherComponent() {
 
     const fetchWeatherData = async () => {
         try {
-            const response = await axios.get(
-                `http://localhost:8080/weather/city`,
-                {
-                    params: { city, state, country },
-                }
-            );
+            const response = await axios.get(`http://localhost:8080/weather/city`, {
+                params: { city, state, country },
+            });
             setWeatherData(response.data);
             setError('');
         } catch (err) {
@@ -87,12 +80,9 @@ export default function WeatherComponent() {
 
     const fetchForecastData = async () => {
         try {
-            const response = await axios.get(
-                `http://localhost:8080/forecast/city`,
-                {
-                    params: { city, state, country },
-                }
-            );
+            const response = await axios.get(`http://localhost:8080/forecast/city`, {
+                params: { city, state, country },
+            });
             setForecastData(response.data);
             setError('');
         } catch (err) {
@@ -134,10 +124,7 @@ export default function WeatherComponent() {
                             >
                                 <option value="">Select state</option>
                                 {States.map((state) => (
-                                    <option
-                                        key={state.value}
-                                        value={state.value}
-                                    >
+                                    <option key={state.value} value={state.value}>
                                         {state.label}
                                     </option>
                                 ))}
@@ -149,10 +136,7 @@ export default function WeatherComponent() {
                             >
                                 <option value="">Select country</option>
                                 {Countries.map((country) => (
-                                    <option
-                                        key={country.value}
-                                        value={country.value}
-                                    >
+                                    <option key={country.value} value={country.value}>
                                         {country.label}
                                     </option>
                                 ))}
@@ -165,9 +149,7 @@ export default function WeatherComponent() {
                             </button>
                         </div>
 
-                        {error && (
-                            <p className="text-red-500 text-sm">{error}</p>
-                        )}
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
 
                         {weatherData && (
                             <>
@@ -197,8 +179,7 @@ export default function WeatherComponent() {
                                 </div>
                                 <div className="text-sm text-center">
                                     <p>
-                                        🌡️ High / Low:{' '}
-                                        {weatherData.maxTemperature}° /{' '}
+                                        🌡️ High / Low: {weatherData.maxTemperature}° /{' '}
                                         {weatherData.minTemperature}°
                                     </p>
                                     <p>💧 Humidity: {weatherData.humidity}%</p>
@@ -213,14 +194,8 @@ export default function WeatherComponent() {
                                             ➤
                                         </span>
                                     </p>
-                                    <p>
-                                        🌅 Sunrise:{' '}
-                                        {convertTo12Hour(weatherData.sunrise)}
-                                    </p>
-                                    <p>
-                                        🌇 Sunset:{' '}
-                                        {convertTo12Hour(weatherData.sunset)}
-                                    </p>
+                                    <p>🌅 Sunrise: {convertTo12Hour(weatherData.sunrise)}</p>
+                                    <p>🌇 Sunset: {convertTo12Hour(weatherData.sunset)}</p>
                                 </div>
                             </>
                         )}
@@ -234,9 +209,7 @@ export default function WeatherComponent() {
                                     key={index}
                                     className="text-center text-sm border rounded-lg p-2 bg-gray-100 shadow h-full flex flex-col justify-between"
                                 >
-                                    <p className="font-semibold">
-                                        {forecast.dayOfWeek}
-                                    </p>
+                                    <p className="font-semibold">{forecast.dayOfWeek}</p>
                                     <p className="text-sm">{forecast.date}</p>
                                     <img
                                         className="w-8 h-8 mx-auto my-2"
@@ -245,8 +218,7 @@ export default function WeatherComponent() {
                                     />
                                     <p className="">{forecast.description}</p>
                                     <p className="">
-                                        {forecast.tempMin}° / {forecast.tempMax}
-                                        °
+                                        {forecast.tempMin}° / {forecast.tempMax}°
                                     </p>
                                 </div>
                             ))}
