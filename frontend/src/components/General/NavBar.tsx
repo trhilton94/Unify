@@ -51,9 +51,13 @@ export default function Navbar() {
                     className="font-bold flex items-center space-x-1 pl-4"
                 >
                     <img
-                        src="/navbarlogo.svg"
+                        src={
+                            general.darkModeState
+                                ? '/navbarlogo_dark.svg'
+                                : '/navbarlogo_light.svg'
+                        }
                         alt="Unify Logo"
-                        className={`h-8 w-auto relative -translate-y-0.25 transition-colors duration-300 ${general.darkModeState ? '' : 'invert'}`}
+                        className="h-8 w-auto relative -translate-y-0.25"
                     />
                     <span
                         className={`text-[26px] transition-colors duration-300 ${general.darkModeState ? 'text-white' : 'text-black'}`}
