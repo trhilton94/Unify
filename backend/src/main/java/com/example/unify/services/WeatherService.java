@@ -26,13 +26,12 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherService {
 
     private final String apiKey = "cc36aeba153de37a9020de7cc0098384";
-    private final String apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
     private final String apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast";
-    private final String apiWeatherAlertsUrl = "https://api.openweathermap.org/data/3.0/onecall";
+    private final String apiWeatherUrl = "https://api.openweathermap.org/data/3.0/onecall";
     private final double latitude = 30.863947;
     private final double longitude = -83.377801;
 
-    public WeatherResponse getWeatherByCoordinates() {
+    public WeatherResponse getCurrentWeatherByCoordinates() {
         String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial", apiWeatherUrl, latitude, longitude,
                 apiKey);
         RestTemplate restTemplate = new RestTemplate();
@@ -40,7 +39,7 @@ public class WeatherService {
         return parseWeatherResponse(jsonResponse);
     }
 
-    public WeatherResponse getWeatherByCity(String city, String state, String country) {
+    public WeatherResponse getCurrentWeatherByCity(String city, String state, String country) {
         String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial", apiWeatherUrl, city, state, country,
                 apiKey);
         RestTemplate restTemplate = new RestTemplate();
@@ -64,16 +63,18 @@ public class WeatherService {
         return parseForecastResponse(jsonResponse);
     }
 
-    public List<WeatherAlertResponse> getWeatherAlertsByCity(String city, String state, String country) {
-        String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial", apiWeatherAlertsUrl, city, state, country,
+    public List<WeatherAlertResponse> getFullWeatherByCity(String city, String state, String country) {
+        String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial",
+                apiWeatherUrl, city, state, country,
                 apiKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
         return parseWeatherAlertResponse(jsonResponse);
     }
 
-    public List<WeatherAlertResponse> getWeatherAlertsByCoordinates() {
-        String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial", apiWeatherAlertsUrl, latitude, longitude,
+    public List<WeatherAlertResponse> getFullWeatherByCoordinates() {
+        String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial",
+                apiWeatherUrl, latitude, longitude,
                 apiKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);

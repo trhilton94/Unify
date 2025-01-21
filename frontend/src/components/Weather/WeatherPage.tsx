@@ -6,6 +6,8 @@ import Countries from '../../utils/Countries';
 import axios from 'axios';
 import NavBar from 'components/General/NavBar';
 
+import { useGeneral } from 'contexts/GeneralProvider';
+
 interface WeatherData {
     cityName: string;
     temperature: number;
@@ -33,7 +35,7 @@ interface ForecastData {
     iconUrl: string;
 }
 
-export default function WeatherComponent() {
+export default function WeatherPage() {
     const [city, setCity] = useState('Valdosta');
     const [state, setState] = useState('GA');
     const [country, setCountry] = useState('US');
@@ -41,8 +43,10 @@ export default function WeatherComponent() {
     const [forecastData, setForecastData] = useState<ForecastData[]>([]);
     const [error, setError] = useState<string>('');
 
+    const { general } = useGeneral();
+
     useEffect(() => {
-        const fetchDefaultWeatherData = async () => {
+        const fetchDefaultFullWeatherData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/weather/home`);
                 setWeatherData(response.data);
@@ -62,11 +66,11 @@ export default function WeatherComponent() {
             }
         };
 
-        fetchDefaultWeatherData();
+        fetchDefaultFullWeatherData();
         fetchDefaultForecastData();
     }, []);
 
-    const fetchWeatherData = async () => {
+    const fetchFullWeatherData = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/weather/city`, {
                 params: { city, state, country },
@@ -91,7 +95,7 @@ export default function WeatherComponent() {
     };
 
     const fetchData = () => {
-        fetchWeatherData();
+        fetchFullWeatherData();
         fetchForecastData();
     };
 
@@ -103,10 +107,20 @@ export default function WeatherComponent() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div
+            className={`min-h-screen transition-colors duration-300 ${
+                general.darkModeState ? 'bg-[#212121] text-white' : 'bg-[#F5F5F5] text-black'
+            }`}
+        >
             <NavBar />
-            <div className="relative font-sans bg-white p-4">
-                <div className="flex flex-col md:flex-row border rounded-lg p-4 bg-white shadow-md w-[700px] absolute top-4 left-4">
+            <div className="relative font-sans p-4">
+                <div
+                    className={`flex flex-col md:flex-row border rounded-lg p-4 shadow-md w-[700px] absolute top-4 left-4 transition-colors duration-300 ${
+                        general.darkModeState
+                            ? 'bg-[#3B3B3B] text-white'
+                            : 'bg-[#FFFFFF] text-black'
+                    }`}
+                >
                     {/* Weather Widget */}
                     <div className="md:w-1/3 p-4">
                         <div className="flex flex-col gap-2 mb-4">
@@ -115,12 +129,20 @@ export default function WeatherComponent() {
                                 placeholder="Enter city"
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
-                                className="w-full p-2 text-sm border rounded-md"
+                                className={`w-full p-2 text-sm border rounded-md transition-colors duration-300 ${
+                                    general.darkModeState
+                                        ? 'bg-[#4C4C4C] text-white'
+                                        : 'bg-[#FFFFFF] text-black'
+                                }`}
                             />
                             <select
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                className="w-full p-2 text-sm border rounded-md"
+                                className={`w-full p-2 text-sm border rounded-md transition-colors duration-300 ${
+                                    general.darkModeState
+                                        ? 'bg-[#4C4C4C] text-white'
+                                        : 'bg-[#FFFFFF] text-black'
+                                }`}
                             >
                                 <option value="">Select state</option>
                                 {States.map((state) => (
@@ -132,7 +154,11 @@ export default function WeatherComponent() {
                             <select
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                className="w-full p-2 text-sm border rounded-md"
+                                className={`w-full p-2 text-sm border rounded-md transition-colors duration-300 ${
+                                    general.darkModeState
+                                        ? 'bg-[#4C4C4C] text-white'
+                                        : 'bg-[#FFFFFF] text-black'
+                                }`}
                             >
                                 <option value="">Select country</option>
                                 {Countries.map((country) => (
@@ -172,8 +198,7 @@ export default function WeatherComponent() {
                                             {weatherData.temperature}°F
                                         </p>
                                         <p className="text-sm font-semibold">
-                                            Feels Like: {weatherData.feelsLike}
-                                            °F
+                                            Feels Like: {weatherData.feelsLike}°F
                                         </p>
                                     </div>
                                 </div>
@@ -207,7 +232,11 @@ export default function WeatherComponent() {
                             {forecastData.map((forecast, index) => (
                                 <div
                                     key={index}
-                                    className="text-center text-sm border rounded-lg p-2 bg-gray-100 shadow h-full flex flex-col justify-between"
+                                    className={`text-center text-sm border rounded-lg p-2 shadow h-full flex flex-col justify-between transition-colors duration-300 ${
+                                        general.darkModeState
+                                            ? 'bg-[#4C4C4C] text-white'
+                                            : 'bg-[#FFFFFF] text-black'
+                                    }`}
                                 >
                                     <p className="font-semibold">{forecast.dayOfWeek}</p>
                                     <p className="text-sm">{forecast.date}</p>

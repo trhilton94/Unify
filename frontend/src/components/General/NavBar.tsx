@@ -46,15 +46,10 @@ export default function Navbar() {
             className={`relative transition-colors shadow-lg duration-300 ${general.darkModeState ? 'bg-[#212121] text-white border-b border-t border-[white]' : 'bg-[#F5F5F5] text-black border-b border-t border-[black]'}`}
         >
             <div className="w-full flex items-center justify-between p-2">
-                <a
-                    href="/"
-                    className="font-bold flex items-center space-x-1 pl-4"
-                >
+                <a href="/" className="font-bold flex items-center space-x-1 pl-4">
                     <img
                         src={
-                            general.darkModeState
-                                ? '/navbarlogo_dark.svg'
-                                : '/navbarlogo_light.svg'
+                            general.darkModeState ? '/navbarlogo_dark.svg' : '/navbarlogo_light.svg'
                         }
                         alt="Unify Logo"
                         className="h-8 w-auto relative -translate-y-0.25"
@@ -132,10 +127,7 @@ export default function Navbar() {
                 </button>
 
                 {general.settingsIconVisibilityState && (
-                    <button
-                        className="focus:outline-none ml-4"
-                        onClick={toggleSettingsDropdown}
-                    >
+                    <button className="focus:outline-none ml-4" onClick={toggleSettingsDropdown}>
                         <img
                             src={settings}
                             alt="Settings Icon"
@@ -149,8 +141,8 @@ export default function Navbar() {
                 <div
                     className={`absolute right-0 p-2 flex flex-col items-center shadow-lg w-64 z-50 transition-colors duration-300 ${
                         general.darkModeState
-                            ? 'bg-[#212121] text-white border-b border-l border-[white]'
-                            : 'bg-[#F5F5F5] text-black border-b border-l border-[black]'
+                            ? 'bg-[#212121] text-white border-b border-l border-t border-[white]'
+                            : 'bg-[#F5F5F5] text-black border-b border-l border-t border-[black]'
                     }`}
                 >
                     <div className="p-1">
@@ -163,9 +155,7 @@ export default function Navbar() {
                         <button
                             onClick={toggleDarkMode}
                             className={`flex items-center rounded-full p-1 w-14 h-8 relative transition-colors duration-300 ${
-                                general.darkModeState
-                                    ? 'bg-[white]'
-                                    : 'bg-[black]'
+                                general.darkModeState ? 'bg-[white]' : 'bg-[black]'
                             }`}
                         >
                             <div
@@ -177,11 +167,7 @@ export default function Navbar() {
                             >
                                 <img
                                     src={general.darkModeState ? dark : light}
-                                    alt={
-                                        general.darkModeState
-                                            ? 'Dark Mode'
-                                            : 'Light Mode'
-                                    }
+                                    alt={general.darkModeState ? 'Dark Mode' : 'Light Mode'}
                                     className={`h-6 w-6 transition-colors duration-300 ${general.darkModeState ? '' : 'invert'}`}
                                 />
                             </div>
@@ -204,22 +190,13 @@ export default function Navbar() {
                     <a href="/amazon" className="block hover:text-blue-300 p-1">
                         Amazon
                     </a>
-                    <a
-                        href="/calendar"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/calendar" className="block hover:text-blue-300 p-1">
                         Calendar
                     </a>
-                    <a
-                        href="/college-football"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/college-football" className="block hover:text-blue-300 p-1">
                         College Football
                     </a>
-                    <a
-                        href="/epic-games"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/epic-games" className="block hover:text-blue-300 p-1">
                         Epic Games
                     </a>
                     <a href="/gmail" className="block hover:text-blue-300 p-1">
@@ -228,10 +205,7 @@ export default function Navbar() {
                     <a href="/hulu" className="block hover:text-blue-300 p-1">
                         Hulu
                     </a>
-                    <a
-                        href="/netflix"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/netflix" className="block hover:text-blue-300 p-1">
                         Netflix
                     </a>
                     <a href="/news" className="block hover:text-blue-300 p-1">
@@ -240,16 +214,10 @@ export default function Navbar() {
                     <a href="/nfl" className="block hover:text-blue-300 p-1">
                         NFL
                     </a>
-                    <a
-                        href="/rocket-league"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/rocket-league" className="block hover:text-blue-300 p-1">
                         Rocket League
                     </a>
-                    <a
-                        href="/smart-home"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/smart-home" className="block hover:text-blue-300 p-1">
                         Smart Home
                     </a>
                     <a href="/steam" className="block hover:text-blue-300 p-1">
@@ -258,16 +226,10 @@ export default function Navbar() {
                     <a href="/twitch" className="block hover:text-blue-300 p-1">
                         Twitch
                     </a>
-                    <a
-                        href="/weather"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/weather" className="block hover:text-blue-300 p-1">
                         Weather
                     </a>
-                    <a
-                        href="/youtube"
-                        className="block hover:text-blue-300 p-1"
-                    >
+                    <a href="/youtube" className="block hover:text-blue-300 p-1">
                         YouTube
                     </a>
                 </div>

@@ -33,11 +33,9 @@ export default function WeatherComponent() {
     const { general } = useGeneral();
 
     useEffect(() => {
-        const fetchDefaultWeatherData = async () => {
+        const fetchDefaultCurrentWeatherData = async () => {
             try {
-                const response = await axios.get(
-                    `http://localhost:8080/weather/home`
-                );
+                const response = await axios.get(`http://localhost:8080/current-weather/home`);
                 setWeatherData(response.data);
                 setError('');
             } catch (err) {
@@ -45,26 +43,19 @@ export default function WeatherComponent() {
             }
         };
 
-        fetchDefaultWeatherData();
+        fetchDefaultCurrentWeatherData();
     }, []);
 
-    const fetchWeatherData = async () => {
+    const fetchCurrentWeatherData = async () => {
         try {
-            const response = await axios.get(
-                `http://localhost:8080/weather/city`,
-                {
-                    params: { city, state, country },
-                }
-            );
+            const response = await axios.get(`http://localhost:8080/current-weather/city`, {
+                params: { city, state, country },
+            });
             setWeatherData(response.data);
             setError('');
         } catch (err) {
             setError('Error fetching weather data.');
         }
-    };
-
-    const fetchData = () => {
-        fetchWeatherData();
     };
 
     const convertTo12Hour = (time: string): string => {
@@ -129,18 +120,14 @@ export default function WeatherComponent() {
                         ))}
                     </select>
                     <button
-                        onClick={fetchData}
+                        onClick={fetchCurrentWeatherData}
                         className="w-full p-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600"
                     >
                         Get Weather
                     </button>
                 </div>
 
-                {error && (
-                    <p className="text-red-500 text-sm text-semibold">
-                        {error}
-                    </p>
-                )}
+                {error && <p className="text-red-500 text-sm text-semibold">{error}</p>}
 
                 {weatherData && (
                     <>
@@ -156,9 +143,7 @@ export default function WeatherComponent() {
                                 alt="Weather Icon"
                             />
                             <div className="flex flex-col">
-                                <p className="text-sm font-bold mb-1">
-                                    {weatherData.description}
-                                </p>
+                                <p className="text-sm font-bold mb-1">{weatherData.description}</p>
                                 <p className="text-2xl font-bold mb-1">
                                     {weatherData.temperature}°F
                                 </p>
@@ -184,13 +169,8 @@ export default function WeatherComponent() {
                                     ➤
                                 </span>
                             </p>
-                            <p>
-                                🌅 Sunrise:{' '}
-                                {convertTo12Hour(weatherData.sunrise)}
-                            </p>
-                            <p>
-                                🌇 Sunset: {convertTo12Hour(weatherData.sunset)}
-                            </p>
+                            <p>🌅 Sunrise: {convertTo12Hour(weatherData.sunrise)}</p>
+                            <p>🌇 Sunset: {convertTo12Hour(weatherData.sunset)}</p>
                         </div>
                     </>
                 )}

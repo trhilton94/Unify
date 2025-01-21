@@ -18,21 +18,21 @@ public class WeatherController {
     @Autowired
     private WeatherService weatherService;
 
-    @GetMapping("/weather/city")
-    public ResponseEntity<?> getWeatherbyCity(@RequestParam String city, @RequestParam String state,
+    @GetMapping("/current-weather/city")
+    public ResponseEntity<?> getCurrentWeatherbyCity(@RequestParam String city, @RequestParam String state,
             @RequestParam String country) {
         try {
-            WeatherResponse weather = weatherService.getWeatherByCity(city, state, country);
+            WeatherResponse weather = weatherService.getCurrentWeatherByCity(city, state, country);
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
         }
     }
 
-    @GetMapping("/weather/home")
-    public ResponseEntity<?> getWeatherForHome() {
+    @GetMapping("/current-weather/home")
+    public ResponseEntity<?> getCurrentWeatherForHome() {
         try {
-            WeatherResponse weather = weatherService.getWeatherByCoordinates();
+            WeatherResponse weather = weatherService.getCurrentWeatherByCoordinates();
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
@@ -62,11 +62,11 @@ public class WeatherController {
         }
     }
 
-    @GetMapping("/weather-alerts/city")
-    public ResponseEntity<?> getWeatherAlertsByCity(@RequestParam String city, @RequestParam String state,
+    @GetMapping("/full-weather/city")
+    public ResponseEntity<?> getFullWeatherByCity(@RequestParam String city, @RequestParam String state,
             @RequestParam String country) {
         try {
-            List<WeatherAlertResponse> weatherAlerts = weatherService.getWeatherAlertsByCity(city, state, country);
+            List<WeatherAlertResponse> weatherAlerts = weatherService.getFullWeatherByCity(city, state, country);
             return ResponseEntity.ok(weatherAlerts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -74,10 +74,10 @@ public class WeatherController {
         }
     }
 
-    @GetMapping("/weather-alerts/home")
-    public ResponseEntity<?> getWeatherAlertsForHome() {
+    @GetMapping("/full-weather/home")
+    public ResponseEntity<?> getFullWeatherForHome() {
         try {
-            List<WeatherAlertResponse> weatherAlerts = weatherService.getWeatherAlertsByCoordinates();
+            List<WeatherAlertResponse> weatherAlerts = weatherService.getFullWeatherByCoordinates();
             return ResponseEntity.ok(weatherAlerts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
