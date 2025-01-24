@@ -7,13 +7,16 @@ import { useGeneral } from 'contexts/GeneralProvider';
 
 import axios from 'axios';
 
-interface WeatherData {
-    cityName: string;
+interface CurrentWeatherData {
+    city: string;
+    state: string;
+    country: string;
     temperature: number;
     feelsLike: number;
     minTemperature: number;
     maxTemperature: number;
     humidity: number;
+    visibility: number;
     icon: string;
     iconUrl: string;
     description: string;
@@ -27,7 +30,7 @@ export default function WeatherComponent() {
     const [city, setCity] = useState('Valdosta');
     const [state, setState] = useState('GA');
     const [country, setCountry] = useState('US');
-    const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+    const [currentWeatherData, setCurrentWeatherData] = useState<CurrentWeatherData | null>(null);
     const [error, setError] = useState<string>('');
 
     const { general } = useGeneral();
@@ -36,7 +39,7 @@ export default function WeatherComponent() {
         const fetchDefaultCurrentWeatherData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/current-weather/home`);
-                setWeatherData(response.data);
+                setCurrentWeatherData(response.data);
                 setError('');
             } catch (err) {
                 setError('Error fetching weather data.');
@@ -51,7 +54,7 @@ export default function WeatherComponent() {
             const response = await axios.get(`http://localhost:8080/current-weather/city`, {
                 params: { city, state, country },
             });
-            setWeatherData(response.data);
+            setCurrentWeatherData(response.data);
             setError('');
         } catch (err) {
             setError('Error fetching weather data.');
@@ -129,48 +132,108 @@ export default function WeatherComponent() {
 
                 {error && <p className="text-red-500 text-sm text-semibold">{error}</p>}
 
-                {weatherData && (
+                {currentWeatherData && (
                     <>
                         <h2 className="text-xl font-bold text-center mb-2">
-                            {weatherData.cityName === 'Remerton'
+                            {currentWeatherData.city === 'Remerton'
                                 ? 'Valdosta, GA'
-                                : `${weatherData.cityName}, ${state}`}
+                                : `${currentWeatherData.city}, ${currentWeatherData.state}`}
                         </h2>
                         <div className="flex items-center justify-center mb-4">
                             <img
                                 className="w-16 h-16 mr-4"
-                                src={weatherData.iconUrl}
+                                src={currentWeatherData.iconUrl}
                                 alt="Weather Icon"
                             />
                             <div className="flex flex-col">
-                                <p className="text-sm font-bold mb-1">{weatherData.description}</p>
+                                <p className="text-sm font-bold mb-1">
+                                    {currentWeatherData.description}
+                                </p>
                                 <p className="text-2xl font-bold mb-1">
-                                    {weatherData.temperature}°F
+                                    {currentWeatherData.temperature}°F
                                 </p>
                                 <p className="text-sm font-semibold">
-                                    Feels Like: {weatherData.feelsLike}°F
+                                    Feels Like: {currentWeatherData.feelsLike}°F
                                 </p>
                             </div>
                         </div>
-                        <div className="text-sm text-center">
-                            <p>
-                                🌡️ High / Low: {weatherData.maxTemperature}° /{' '}
-                                {weatherData.minTemperature}°
-                            </p>
-                            <p>💧 Humidity: {weatherData.humidity}%</p>
-                            <p>
-                                💨 Wind: {weatherData.windSpeed} mph
-                                <span
-                                    className="inline-block ml-1"
-                                    style={{
-                                        transform: `rotate(${weatherData.windDegree}deg)`,
-                                    }}
-                                >
-                                    ➤
+                        <div className="text-sm font-semibold">
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img
+                                        src="icon_temp.svg"
+                                        alt="Temperature Icon"
+                                        className="w-5 h-5"
+                                    />
+                                    <span>High / Low</span>
+                                </div>
+                                <span>
+                                    {currentWeatherData.maxTemperature === -1
+                                        ? '--'
+                                        : `${currentWeatherData.maxTemperature}°`}{' '}
+                                    / {currentWeatherData.minTemperature}°
                                 </span>
-                            </p>
-                            <p>🌅 Sunrise: {convertTo12Hour(weatherData.sunrise)}</p>
-                            <p>🌇 Sunset: {convertTo12Hour(weatherData.sunset)}</p>
+                            </div>
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img
+                                        src="icon_humidity.svg"
+                                        alt="Humidity Icon"
+                                        className="w-5 h-5"
+                                    />
+                                    <span>Humidity</span>
+                                </div>
+                                <span>{currentWeatherData.humidity}%</span>
+                            </div>
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img src="icon_wind.svg" alt="Wind Icon" className="w-5 h-5" />
+                                    <span>Wind</span>
+                                </div>
+                                <span>
+                                    {currentWeatherData.windSpeed} mph{' '}
+                                    <span
+                                        style={{
+                                            transform: `rotate(${currentWeatherData.windDegree}deg)`,
+                                        }}
+                                    >
+                                        ➤
+                                    </span>
+                                </span>
+                            </div>
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img
+                                        src="icon_visibility.svg"
+                                        alt="Visibility Icon"
+                                        className="w-5 h-5"
+                                    />
+                                    <span>Visibility</span>
+                                </div>
+                                <span>{currentWeatherData.visibility} mi</span>
+                            </div>
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img
+                                        src="icon_sunrise.svg"
+                                        alt="Sunrise Icon"
+                                        className="w-5 h-5"
+                                    />
+                                    <span>Sunrise</span>
+                                </div>
+                                <span>{convertTo12Hour(currentWeatherData.sunrise)}</span>
+                            </div>
+                            <div className="flex justify-between py-2">
+                                <div className="flex items-center space-x-2">
+                                    <img
+                                        src="icon_sunset.svg"
+                                        alt="Sunset Icon"
+                                        className="w-5 h-5"
+                                    />
+                                    <span>Sunset</span>
+                                </div>
+                                <span>{convertTo12Hour(currentWeatherData.sunset)}</span>
+                            </div>
                         </div>
                     </>
                 )}

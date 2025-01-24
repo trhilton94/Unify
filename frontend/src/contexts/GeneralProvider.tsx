@@ -1,11 +1,4 @@
-import React, {
-    createContext,
-    useState,
-    useContext,
-    Dispatch,
-    SetStateAction,
-    ReactNode,
-} from 'react';
+import React, { createContext, useState, useContext, Dispatch, SetStateAction, ReactNode } from 'react';
 
 // Define the type for the context state
 type GeneralState = {
@@ -49,9 +42,5 @@ type GeneralProviderProps = {
 export const GeneralProvider: React.FC<GeneralProviderProps> = ({ children }) => {
     const [general, setGeneral] = useState<GeneralState>(defaultGeneralState);
 
-    return (
-        <GeneralContext.Provider value={{ general, setGeneral }}>
-            {children}
-        </GeneralContext.Provider>
-    );
+    return <GeneralContext.Provider value={{ general, setGeneral }}>{children}</GeneralContext.Provider>;
 };

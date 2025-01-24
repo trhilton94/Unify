@@ -8,7 +8,7 @@ import NavBar from 'components/General/NavBar';
 
 import { useGeneral } from 'contexts/GeneralProvider';
 
-interface WeatherData {
+interface CurrentWeatherData {
     cityName: string;
     temperature: number;
     feelsLike: number;
@@ -23,6 +23,8 @@ interface WeatherData {
     sunrise: string;
     sunset: string;
 }
+
+interface FullWeatherData {}
 
 interface ForecastData {
     date: string;
@@ -39,7 +41,7 @@ export default function WeatherPage() {
     const [city, setCity] = useState('Valdosta');
     const [state, setState] = useState('GA');
     const [country, setCountry] = useState('US');
-    const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+    const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
     const [forecastData, setForecastData] = useState<ForecastData[]>([]);
     const [error, setError] = useState<string>('');
 
@@ -48,7 +50,7 @@ export default function WeatherPage() {
     useEffect(() => {
         const fetchDefaultFullWeatherData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/weather/home`);
+                const response = await axios.get(`http://localhost:8080/full-weather/home`);
                 setWeatherData(response.data);
                 setError('');
             } catch (err) {
@@ -116,9 +118,7 @@ export default function WeatherPage() {
             <div className="relative font-sans p-4">
                 <div
                     className={`flex flex-col md:flex-row border rounded-lg p-4 shadow-md w-[700px] absolute top-4 left-4 transition-colors duration-300 ${
-                        general.darkModeState
-                            ? 'bg-[#3B3B3B] text-white'
-                            : 'bg-[#FFFFFF] text-black'
+                        general.darkModeState ? 'bg-[#3B3B3B] text-white' : 'bg-[#FFFFFF] text-black'
                     }`}
                 >
                     {/* Weather Widget */}
@@ -191,12 +191,8 @@ export default function WeatherPage() {
                                         alt="Weather Icon"
                                     />
                                     <div className="flex flex-col">
-                                        <p className="text-sm font-bold mb-1">
-                                            {weatherData.description}
-                                        </p>
-                                        <p className="text-2xl font-bold mb-1">
-                                            {weatherData.temperature}°F
-                                        </p>
+                                        <p className="text-sm font-bold mb-1">{weatherData.description}</p>
+                                        <p className="text-2xl font-bold mb-1">{weatherData.temperature}°F</p>
                                         <p className="text-sm font-semibold">
                                             Feels Like: {weatherData.feelsLike}°F
                                         </p>

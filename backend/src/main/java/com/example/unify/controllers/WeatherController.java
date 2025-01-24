@@ -1,8 +1,8 @@
 package com.example.unify.controllers;
 
 import com.example.unify.models.ForecastResponse;
-import com.example.unify.models.WeatherAlertResponse;
-import com.example.unify.models.WeatherResponse;
+import com.example.unify.models.FullWeatherResponse;
+import com.example.unify.models.CurrentWeatherResponse;
 import com.example.unify.services.WeatherService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class WeatherController {
     public ResponseEntity<?> getCurrentWeatherbyCity(@RequestParam String city, @RequestParam String state,
             @RequestParam String country) {
         try {
-            WeatherResponse weather = weatherService.getCurrentWeatherByCity(city, state, country);
+            CurrentWeatherResponse weather = weatherService.getCurrentWeatherByCity(city, state, country);
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
@@ -32,12 +32,38 @@ public class WeatherController {
     @GetMapping("/current-weather/home")
     public ResponseEntity<?> getCurrentWeatherForHome() {
         try {
-            WeatherResponse weather = weatherService.getCurrentWeatherByCoordinates();
+            CurrentWeatherResponse weather = weatherService.getCurrentWeatherByCoordinates();
             return ResponseEntity.ok(weather);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error fetching weather data: " + e.getMessage());
         }
     }
+
+    // @GetMapping("/full-weather/city")
+    // public ResponseEntity<?> getFullWeatherByCity(@RequestParam String city,
+    // @RequestParam String state,
+    // @RequestParam String country) {
+    // try {
+    // List<FullWeatherResponse> weatherAlerts =
+    // weatherService.getFullWeatherByCity(city, state, country);
+    // return ResponseEntity.ok(weatherAlerts);
+    // } catch (Exception e) {
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    // .body("Error fetching weather alert data: " + e.getMessage());
+    // }
+    // }
+
+    // @GetMapping("/full-weather/home")
+    // public ResponseEntity<?> getFullWeatherForHome() {
+    // try {
+    // List<FullWeatherResponse> weatherAlerts =
+    // weatherService.getFullWeatherByCoordinates();
+    // return ResponseEntity.ok(weatherAlerts);
+    // } catch (Exception e) {
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    // .body("Error fetching weather alert data: " + e.getMessage());
+    // }
+    // }
 
     @GetMapping("/forecast/city")
     public ResponseEntity<?> getForecastByCity(@RequestParam String city, @RequestParam String state,
@@ -59,29 +85,6 @@ public class WeatherController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error fetching forecast data: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/full-weather/city")
-    public ResponseEntity<?> getFullWeatherByCity(@RequestParam String city, @RequestParam String state,
-            @RequestParam String country) {
-        try {
-            List<WeatherAlertResponse> weatherAlerts = weatherService.getFullWeatherByCity(city, state, country);
-            return ResponseEntity.ok(weatherAlerts);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error fetching weather alert data: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/full-weather/home")
-    public ResponseEntity<?> getFullWeatherForHome() {
-        try {
-            List<WeatherAlertResponse> weatherAlerts = weatherService.getFullWeatherByCoordinates();
-            return ResponseEntity.ok(weatherAlerts);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error fetching weather alert data: " + e.getMessage());
         }
     }
 }

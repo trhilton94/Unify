@@ -48,9 +48,7 @@ export default function Navbar() {
             <div className="w-full flex items-center justify-between p-2">
                 <a href="/" className="font-bold flex items-center space-x-1 pl-4">
                     <img
-                        src={
-                            general.darkModeState ? '/navbarlogo_dark.svg' : '/navbarlogo_light.svg'
-                        }
+                        src={general.darkModeState ? '/navbarlogo_dark.svg' : '/navbarlogo_light.svg'}
                         alt="Unify Logo"
                         className="h-8 w-auto relative -translate-y-0.25"
                     />
@@ -179,9 +177,7 @@ export default function Navbar() {
             {general.categoryDropdownState && (
                 <div
                     className={`2xl:hidden p-2 flex flex-col items-center shadow-lg font-semibold transition-colors duration-300 ${
-                        general.darkModeState
-                            ? 'bg-[#212121] text-white'
-                            : 'bg-[#F5F5F5] text-black'
+                        general.darkModeState ? 'bg-[#212121] text-white' : 'bg-[#F5F5F5] text-black'
                     }`}
                 >
                     <a href="/" className="block hover:text-blue-300 p-1">

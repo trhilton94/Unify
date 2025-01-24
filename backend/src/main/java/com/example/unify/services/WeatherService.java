@@ -1,12 +1,16 @@
 package com.example.unify.services;
 
 import com.example.unify.models.ForecastResponse;
-import com.example.unify.models.WeatherAlertResponse;
-import com.example.unify.models.WeatherResponse;
+import com.example.unify.models.CurrentWeatherResponse;
+import com.example.unify.models.FullWeatherResponse;
+import com.example.unify.models.ReverseGeocodeResponse;
+import com.example.unify.models.ForwardGeocodeResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -14,10 +18,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,31 +31,34 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WeatherService {
 
-    private final String apiKey = "cc36aeba153de37a9020de7cc0098384";
+    private final String weatherAPIKey = "cc36aeba153de37a9020de7cc0098384";
     private final String apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast";
     private final String apiWeatherUrl = "https://api.openweathermap.org/data/3.0/onecall";
+    private final String locationAPIKey = "pk.34a6c17d2988b52ea848a0949a11ae9f";
+    private final String apiReverseGeocodeUrl = "https://us1.locationiq.com/v1/reverse";
+    private final String apiForwardGeocodeUrl = "https://us1.locationiq.com/v1/search";
     private final double latitude = 30.863947;
     private final double longitude = -83.377801;
 
-    public WeatherResponse getCurrentWeatherByCoordinates() {
+    public CurrentWeatherResponse getCurrentWeatherByCoordinates() {
         String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial", apiWeatherUrl, latitude, longitude,
-                apiKey);
+                weatherAPIKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
-        return parseWeatherResponse(jsonResponse);
+        return parseCurrentWeatherResponse(jsonResponse);
     }
 
-    public WeatherResponse getCurrentWeatherByCity(String city, String state, String country) {
+    public CurrentWeatherResponse getCurrentWeatherByCity(String city, String state, String country) {
         String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial", apiWeatherUrl, city, state, country,
-                apiKey);
+                weatherAPIKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
-        return parseWeatherResponse(jsonResponse);
+        return parseCurrentWeatherResponse(jsonResponse);
     }
 
     public List<ForecastResponse> getForecastByCity(String city, String state, String country) {
         String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial", apiForecastUrl, city, state, country,
-                apiKey);
+                weatherAPIKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
         return parseForecastResponse(jsonResponse);
@@ -57,70 +66,103 @@ public class WeatherService {
 
     public List<ForecastResponse> getForecastByCoordinates() {
         String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial", apiForecastUrl, latitude, longitude,
-                apiKey);
+                weatherAPIKey);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
         return parseForecastResponse(jsonResponse);
     }
 
-    public List<WeatherAlertResponse> getFullWeatherByCity(String city, String state, String country) {
-        String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial",
-                apiWeatherUrl, city, state, country,
-                apiKey);
+    // public List<FullWeatherResponse> getFullWeatherByCity(String city, String
+    // state, String country) {
+    // String url = String.format("%s?q=%s,%s,%s&appid=%s&units=imperial",
+    // apiWeatherUrl, city, state, country,
+    // weatherAPIKey);
+    // RestTemplate restTemplate = new RestTemplate();
+    // String jsonResponse = restTemplate.getForObject(url, String.class);
+    // return parseFullWeatherResponse(jsonResponse);
+    // }
+
+    // public List<FullWeatherResponse> getFullWeatherByCoordinates() {
+    // String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial",
+    // apiWeatherUrl, latitude, longitude,
+    // weatherAPIKey);
+    // RestTemplate restTemplate = new RestTemplate();
+    // String jsonResponse = restTemplate.getForObject(url, String.class);
+    // return parseFullWeatherResponse(jsonResponse);
+    // }
+
+    private ReverseGeocodeResponse reverseGeocode(double latitude, double longitude) {
+        String url = String.format("%s?key=%s&lat=%f&lon=%f&format=json", apiReverseGeocodeUrl, locationAPIKey,
+                latitude, longitude);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
-        return parseWeatherAlertResponse(jsonResponse);
+        return parseReverseGeocodeResponse(jsonResponse);
     }
 
-    public List<WeatherAlertResponse> getFullWeatherByCoordinates() {
-        String url = String.format("%s?lat=%f&lon=%f&appid=%s&units=imperial",
-                apiWeatherUrl, latitude, longitude,
-                apiKey);
+    private ForwardGeocodeResponse forwardGeocode(String city, String state, String country) {
+        String url = String.format("%s?key=%s&city=%s&state=%s&country=%s&format=json", apiForwardGeocodeUrl,
+                locationAPIKey, city, state, country);
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject(url, String.class);
-        return parseWeatherAlertResponse(jsonResponse);
+        return parseForwardGeocodeResponse(jsonResponse);
     }
 
-    private WeatherResponse parseWeatherResponse(String jsonResponse) {
+    private CurrentWeatherResponse parseCurrentWeatherResponse(String jsonResponse) {
         JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
+        CurrentWeatherResponse currentWeatherResponse = new CurrentWeatherResponse();
 
-        WeatherResponse weatherResponse = new WeatherResponse();
+        double latitude = json.get("lat").getAsDouble();
+        double longitude = json.get("lon").getAsDouble();
+        ReverseGeocodeResponse reverseGeocodeResponse = reverseGeocode(latitude, longitude);
+        currentWeatherResponse.setCity(reverseGeocodeResponse.getCity());
+        currentWeatherResponse.setState(reverseGeocodeResponse.getState());
+        currentWeatherResponse.setCountry(reverseGeocodeResponse.getCountry());
 
-        weatherResponse.setCityName(json.get("name").getAsString());
+        int timezoneOffset = json.get("timezone_offset").getAsInt();
 
-        JsonObject main = json.getAsJsonObject("main");
-        weatherResponse.setTemperature((int) Math.round(main.get("temp").getAsDouble()));
-        weatherResponse.setFeelsLike((int) Math.round(main.get("feels_like").getAsDouble()));
-        weatherResponse.setMinTemperature((int) Math.round(main.get("temp_min").getAsDouble()));
-        weatherResponse.setMaxTemperature((int) Math.round(main.get("temp_max").getAsDouble()));
+        JsonObject current = json.getAsJsonObject("current");
 
-        weatherResponse.setHumidity(main.get("humidity").getAsInt());
+        currentWeatherResponse.setTemperature((int) Math.round(current.get("temp").getAsDouble()));
+        currentWeatherResponse.setFeelsLike((int) Math.round(current.get("feels_like").getAsDouble()));
+        currentWeatherResponse.setHumidity(current.get("humidity").getAsInt());
+        currentWeatherResponse.setVisibility(current.get("visibility").getAsInt() / 1000);
+        currentWeatherResponse
+                .setSunrise(convertUnixToReadableTime(current.get("sunrise").getAsLong(), timezoneOffset));
+        currentWeatherResponse.setSunset(convertUnixToReadableTime(current.get("sunset").getAsLong(), timezoneOffset));
+        currentWeatherResponse.setWindDegree(current.get("wind_deg").getAsInt());
+        currentWeatherResponse.setWindSpeed((int) Math.round(current.get("wind_speed").getAsDouble()));
 
-        JsonObject weather = json.getAsJsonArray("weather").get(0).getAsJsonObject();
+        JsonObject daily = json.getAsJsonArray("daily").get(0).getAsJsonObject();
+        JsonObject temps = daily.getAsJsonObject("temp");
+        currentWeatherResponse.setMinTemperature((int) Math.round(temps.get("min").getAsDouble()));
 
+        long currentUnixTime = current.get("dt").getAsLong();
+        int currentHour = getHourFromUnix(currentUnixTime, timezoneOffset);
+
+        if (currentHour < 18) {
+            currentWeatherResponse.setMaxTemperature((int) Math.round(temps.get("max").getAsDouble()));
+        } else {
+            currentWeatherResponse.setMaxTemperature(-1);
+        }
+
+        JsonObject weather = current.getAsJsonArray("weather").get(0).getAsJsonObject();
         String description = weather.get("description").getAsString();
         String capitalizedDescription = Arrays.stream(description.split(" "))
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1)).collect(Collectors.joining(" "));
-        weatherResponse.setDescription(capitalizedDescription);
+        currentWeatherResponse.setDescription(capitalizedDescription);
 
-        weatherResponse.setIcon(weather.get("icon").getAsString());
+        currentWeatherResponse.setIcon(weather.get("icon").getAsString());
 
         String iconCode = weather.get("icon").getAsString();
         String iconUrl = String.format("http://openweathermap.org/img/wn/%s.png", iconCode);
-        weatherResponse.setIconUrl(iconUrl);
+        currentWeatherResponse.setIconUrl(iconUrl);
 
-        JsonObject wind = json.getAsJsonObject("wind");
-        weatherResponse.setWindDegree(wind.get("deg").getAsInt());
-        weatherResponse.setWindSpeed((int) Math.round(wind.get("speed").getAsDouble()));
-
-        JsonObject sys = json.getAsJsonObject("sys");
-        long sunrise = sys.get("sunrise").getAsLong();
-        long sunset = sys.get("sunset").getAsLong();
-        weatherResponse.setSunrise(convertUnixToReadableTime(sunrise, -18000));
-        weatherResponse.setSunset(convertUnixToReadableTime(sunset, -18000));
-
-        return weatherResponse;
+        return currentWeatherResponse;
     }
+
+    // private FullWeatherResponse parseFullWeatherResponse(String jsonResponse) {
+
+    // }
 
     private List<ForecastResponse> parseForecastResponse(String jsonResponse) {
         JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
@@ -165,26 +207,23 @@ public class WeatherService {
         return new ArrayList<>(dailyForecasts.values());
     }
 
-    private List<WeatherAlertResponse> parseWeatherAlertResponse(String jsonResponse) {
+    private ReverseGeocodeResponse parseReverseGeocodeResponse(String jsonResponse) {
         JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
-        JsonArray alerts = json.has("alerts") ? json.getAsJsonArray("alerts") : new JsonArray();
+        ReverseGeocodeResponse reverseGeocodeResponse = new ReverseGeocodeResponse();
+        JsonObject address = json.getAsJsonObject("address");
+        reverseGeocodeResponse.setCity(address.get("city").getAsString());
+        reverseGeocodeResponse.setState(address.get("state").getAsString());
+        reverseGeocodeResponse.setCountry(address.get("country").getAsString());
+        return reverseGeocodeResponse;
+    }
 
-        List<WeatherAlertResponse> weatherAlertResponses = new ArrayList<>();
-
-        for (JsonElement alertElement : alerts) {
-            JsonObject alertObject = alertElement.getAsJsonObject();
-            WeatherAlertResponse weatherAlertResponse = new WeatherAlertResponse();
-
-            weatherAlertResponse.setSenderName(alertObject.get("sender_name").getAsString());
-            weatherAlertResponse.setEvent(alertObject.get("event").getAsString());
-            weatherAlertResponse.setStartTime(convertUnixToReadableTime(alertObject.get("start").getAsInt(), -18000));
-            weatherAlertResponse.setEndTime(convertUnixToReadableTime(alertObject.get("end").getAsInt(), -18000));
-            weatherAlertResponse.setDescription(alertObject.get("description").getAsString());
-
-            weatherAlertResponses.add(weatherAlertResponse);
-        }
-
-        return weatherAlertResponses;
+    private ForwardGeocodeResponse parseForwardGeocodeResponse(String jsonResponse) {
+        JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+        ForwardGeocodeResponse forwardGeocodeResponse = new ForwardGeocodeResponse();
+        JsonObject json = jsonArray.get(1).getAsJsonObject();
+        forwardGeocodeResponse.setLatitude(json.get("lat").getAsInt());
+        forwardGeocodeResponse.setLongitude(json.get("lon").getAsInt());
+        return forwardGeocodeResponse;
     }
 
     private String convertUnixToReadableTime(long timestamp, int timezoneOffset) {
@@ -197,4 +236,11 @@ public class WeatherService {
         return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 
+    private int getHourFromUnix(long unixTimestamp, int timezoneOffset) {
+        long adjustedTime = unixTimestamp + timezoneOffset;
+        Date date = new Date(adjustedTime * 1000L);
+        SimpleDateFormat formatter = new SimpleDateFormat("H");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return Integer.parseInt(formatter.format(date));
+    }
 }
