@@ -17,7 +17,7 @@ public class CurrentWeatherResponse {
     private String iconUrl;
     private String description;
     private int windDegree;
-    private double windSpeed;
+    private int windSpeed;
     private String sunrise;
     private String sunset;
 }

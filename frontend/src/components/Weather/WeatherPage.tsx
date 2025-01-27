@@ -118,10 +118,11 @@ export default function WeatherPage() {
             <div className="relative font-sans p-4">
                 <div
                     className={`flex flex-col md:flex-row border rounded-lg p-4 shadow-md w-[700px] absolute top-4 left-4 transition-colors duration-300 ${
-                        general.darkModeState ? 'bg-[#3B3B3B] text-white' : 'bg-[#FFFFFF] text-black'
+                        general.darkModeState
+                            ? 'bg-[#3B3B3B] text-white'
+                            : 'bg-[#FFFFFF] text-black'
                     }`}
                 >
-                    {/* Weather Widget */}
                     <div className="md:w-1/3 p-4">
                         <div className="flex flex-col gap-2 mb-4">
                             <input
@@ -191,8 +192,12 @@ export default function WeatherPage() {
                                         alt="Weather Icon"
                                     />
                                     <div className="flex flex-col">
-                                        <p className="text-sm font-bold mb-1">{weatherData.description}</p>
-                                        <p className="text-2xl font-bold mb-1">{weatherData.temperature}°F</p>
+                                        <p className="text-sm font-bold mb-1">
+                                            {weatherData.description}
+                                        </p>
+                                        <p className="text-2xl font-bold mb-1">
+                                            {weatherData.temperature}°F
+                                        </p>
                                         <p className="text-sm font-semibold">
                                             Feels Like: {weatherData.feelsLike}°F
                                         </p>
@@ -222,7 +227,6 @@ export default function WeatherPage() {
                         )}
                     </div>
 
-                    {/* Forecast Columns */}
                     {forecastData && (
                         <div className="md:w-2/3 p-4 grid grid-cols-2 gap-4 flex-grow">
                             {forecastData.map((forecast, index) => (

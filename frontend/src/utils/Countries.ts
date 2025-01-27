@@ -176,7 +176,7 @@ const countries: { value: string; label: string }[] = [
     { value: 'UA', label: 'Ukraine' },
     { value: 'AE', label: 'United Arab Emirates' },
     { value: 'GB', label: 'United Kingdom' },
-    { value: 'US', label: 'United States' },
+    { value: 'US', label: 'United States of America' },
     { value: 'UY', label: 'Uruguay' },
     { value: 'UZ', label: 'Uzbekistan' },
     { value: 'VU', label: 'Vanuatu' },
